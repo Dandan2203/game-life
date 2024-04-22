@@ -14,92 +14,80 @@ namespace game_life
     public partial class Form1 : Form
     {
         private Graphics graphics;
-        private bool[,] field;
-        private const int rows  = 40;
-        private const int cols  = 40;
+        private Logic logic;
+        private Timer timer;
         private const int cellSize = 15;
 
         public Form1()
         {
             InitializeComponent();
-        }
+            logic = new Logic(40, 40);
 
-        private void StartGane()
-        {
-            if (timer.Enabled)
-                return;
-
-            field = new bool[cols, rows];
+            timer = new Timer();
+            timer.Interval = 100;
+            timer.Tick += Timer_Tick;
 
             pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
             graphics = Graphics.FromImage(pictureBox1.Image);
-            timer.Start();
         }
 
-        private void Generation()
+        private void StartGame()
         {
-            graphics.Clear(Color.White);
-
-            var newField = new bool[cols, rows];
-
-            for (int x = 0; x < cols; x++)
+            if (!timer.Enabled)
             {
-                for (int y = 0; y < rows; y++)
-                {
-                    var neighboursCount = Neighbours(x, y);
-                    var lifeNeighbour = field[x, y];
-
-                    if(!lifeNeighbour && neighboursCount == 3)
-                        newField[x, y] = true;
-                    else if ( lifeNeighbour && (neighboursCount < 2 || neighboursCount > 3) )   
-                        newField[x, y] = false;
-                    else
-                        newField[x, y] = field[x, y];
-
-                    if (lifeNeighbour)
-                        graphics.FillRectangle(Brushes.Black, x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
-                }
+                timer.Start();
+                StartButton.Enabled = false;
+                StopButton.Enabled = true;
             }
-            field = newField;
+        }
+
+        private void StopGame()
+        {
+            if (timer.Enabled)
+            {
+                timer.Stop();
+                StartButton.Enabled = true;
+                StopButton.Enabled = false;
+            }
+        }
+
+        private void ResetGaame()
+        {
+            StopGame();
+            logic.ClearField();
+            graphics.Clear(Color.White);
             pictureBox1.Refresh();
         }
 
-        private int Neighbours(int x, int y)
+        private void Timer_Tick(object sender, EventArgs e)
         {
-            int count = 0;
+            timer.Interval = SpeedReg.Value;
+            DrawGeneration();
+        }
 
-            for (int i = -1;i < 2; i++)
+        private void DrawGeneration()
+        {
+            graphics.Clear(Color.White);
+            var field = logic.CurrentGeneration();
+
+            for (int x = 0; x < field.GetLength(0); x++)
             {
-                for (int j = -1; j < 2; j++)
+                for (int y = 0; y < field.GetLength(1); y++)
                 {
-                    var col = (x + i + cols) % cols;
-                    var row = (y + j + rows) % rows;
-
-                    var isSelfCheck = col == x && row == y;
-                    var lifeNeighbour = field[col, row];
-
-                    if (lifeNeighbour && !isSelfCheck)
-                        count++;
+                    if (field[x, y])
+                    {
+                        graphics.FillRectangle(Brushes.Black, x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
+                    }
                 }
             }
-            return count;
-        }
-        private void StopGame()
-        {
-            if (!timer.Enabled)
-                return;
-            timer.Stop();
-        }
 
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            Generation();
-            timer.Interval = SpeedReg.Value;
+            pictureBox1.Refresh();
+            logic.NextGeneration();
         }
 
         private void StartButton_Click(object sender, EventArgs e)
         {
-            StartGane();
+            StartGame();
         }
 
         private void StopButton_Click(object sender, EventArgs e)
@@ -107,33 +95,27 @@ namespace game_life
             StopGame();
         }
 
+        private void ResetButton_Click(object sender, EventArgs e)
+        {
+            ResetGaame();
+        }
+
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!timer.Enabled) 
-                return;
+            int x = e.Location.X / cellSize;
+            int y = e.Location.Y / cellSize;
 
             if (e.Button == MouseButtons.Left)
             {
-                var x = e.Location.X / 15;
-                var y = e.Location.Y / 15;
-                var validationPassed = ValidateMousePos(x, y);
-                if (validationPassed)
-                    field[x, y] = true;
+                logic.AddCell(x, y);
+                pictureBox1.Refresh();
             }
-            
+
             if (e.Button == MouseButtons.Right)
             {
-                var x = e.Location.X / 15;
-                var y = e.Location.Y / 15;
-                var validationPassed = ValidateMousePos(x, y);
-                if (validationPassed)
-                    field[x, y] = false;
+                logic.RemoveCell(x, y);
+                pictureBox1.Refresh();
             }
-        }
-
-        private bool ValidateMousePos(int x , int y)
-        {
-            return x >= 0 && y >= 0 && x < cols && y < rows;
         }
     }
 }
