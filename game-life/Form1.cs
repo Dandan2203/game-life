@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -76,7 +77,7 @@ namespace game_life
                 {
                     if (field[x, y])
                     {
-                        graphics.FillRectangle(Brushes.Black, x * cellSize, y * cellSize, cellSize - 1, cellSize - 1);
+                        graphics.FillRectangle(Brushes.Black, x * cellSize, y * cellSize, cellSize - 2, cellSize - 2);
                     }
                 }
             }
@@ -115,6 +116,27 @@ namespace game_life
             {
                 logic.RemoveCell(x, y);
                 pictureBox1.Refresh();
+            }
+        }
+
+        private void SaveButton_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Text Files (*.txt)|*.txt";
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                logic.SaveFieldToFile(saveFileDialog.FileName);
+            }
+        }
+
+        private void LoadButton_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text Files (*.txt)|*.txt";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                logic.LoadFieldFromFile(openFileDialog.FileName);
+                DrawGeneration();
             }
         }
     }

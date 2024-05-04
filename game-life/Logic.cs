@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace game_life
         private const int rows = 40;
         private const int cols = 40;
 
-        public Logic(int rows, int cols) 
+        public Logic(int rows, int cols)
         {
             field = new bool[rows, cols];
         }
@@ -87,6 +88,32 @@ namespace game_life
         public void RemoveCell(int x, int y)
         {
             UpdateCell(x, y, false);
+        }
+
+        public void SaveFieldToFile(string filename)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int y = 0; y < rows; y++)
+            {
+                for (int x = 0; x < cols; x++)
+                {
+                    sb.Append(field[x, y] ? "1" : "0");
+                }
+                sb.AppendLine();
+            }
+            File.WriteAllText(filename, sb.ToString());
+        }
+
+        public void LoadFieldFromFile(string filename)
+        {
+            string[] lines = File.ReadAllLines(filename);
+            for (int y = 0; y < Math.Min(rows, lines.Length); y++)
+            {
+                for (int x = 0; x < Math.Min(cols, lines[y].Length); x++)
+                {
+                    field[x, y] = lines[y][x] == '1';
+                }
+            }
         }
 
         public void ClearField()

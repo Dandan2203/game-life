@@ -29,13 +29,15 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.ResetButton = new System.Windows.Forms.Button();
             this.SpeedReg = new System.Windows.Forms.TrackBar();
             this.StopButton = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.StartButton = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.ResetButton = new System.Windows.Forms.Button();
+            this.LoadButton = new System.Windows.Forms.Button();
+            this.SaveButton = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.SpeedReg)).BeginInit();
             this.panel2.SuspendLayout();
@@ -44,6 +46,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.SaveButton);
+            this.panel1.Controls.Add(this.LoadButton);
             this.panel1.Controls.Add(this.ResetButton);
             this.panel1.Controls.Add(this.SpeedReg);
             this.panel1.Controls.Add(this.StopButton);
@@ -54,10 +58,21 @@
             this.panel1.Size = new System.Drawing.Size(150, 600);
             this.panel1.TabIndex = 0;
             // 
+            // ResetButton
+            // 
+            this.ResetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.ResetButton.Location = new System.Drawing.Point(3, 556);
+            this.ResetButton.Name = "ResetButton";
+            this.ResetButton.Size = new System.Drawing.Size(144, 41);
+            this.ResetButton.TabIndex = 7;
+            this.ResetButton.Text = "Reset";
+            this.ResetButton.UseVisualStyleBackColor = true;
+            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            // 
             // SpeedReg
             // 
             this.SpeedReg.Location = new System.Drawing.Point(5, 32);
-            this.SpeedReg.Maximum = 500;
+            this.SpeedReg.Maximum = 1000;
             this.SpeedReg.Minimum = 25;
             this.SpeedReg.Name = "SpeedReg";
             this.SpeedReg.Size = new System.Drawing.Size(142, 45);
@@ -88,7 +103,7 @@
             // StartButton
             // 
             this.StartButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.StartButton.Location = new System.Drawing.Point(3, 462);
+            this.StartButton.Location = new System.Drawing.Point(3, 368);
             this.StartButton.Name = "StartButton";
             this.StartButton.Size = new System.Drawing.Size(144, 41);
             this.StartButton.TabIndex = 1;
@@ -114,16 +129,27 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
             // 
-            // ResetButton
+            // LoadButton
             // 
-            this.ResetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.ResetButton.Location = new System.Drawing.Point(3, 556);
-            this.ResetButton.Name = "ResetButton";
-            this.ResetButton.Size = new System.Drawing.Size(144, 41);
-            this.ResetButton.TabIndex = 7;
-            this.ResetButton.Text = "Reset";
-            this.ResetButton.UseVisualStyleBackColor = true;
-            this.ResetButton.Click += new System.EventHandler(this.ResetButton_Click);
+            this.LoadButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.LoadButton.Location = new System.Drawing.Point(3, 462);
+            this.LoadButton.Name = "LoadButton";
+            this.LoadButton.Size = new System.Drawing.Size(144, 41);
+            this.LoadButton.TabIndex = 8;
+            this.LoadButton.Text = "Load";
+            this.LoadButton.UseVisualStyleBackColor = true;
+            this.LoadButton.Click += new System.EventHandler(this.LoadButton_Click);
+            // 
+            // SaveButton
+            // 
+            this.SaveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.SaveButton.Location = new System.Drawing.Point(3, 415);
+            this.SaveButton.Name = "SaveButton";
+            this.SaveButton.Size = new System.Drawing.Size(144, 41);
+            this.SaveButton.TabIndex = 9;
+            this.SaveButton.Text = "Save";
+            this.SaveButton.UseVisualStyleBackColor = true;
+            this.SaveButton.Click += new System.EventHandler(this.SaveButton_Click);
             // 
             // Form1
             // 
@@ -155,6 +181,8 @@
         private System.Windows.Forms.Button StopButton;
         private System.Windows.Forms.TrackBar SpeedReg;
         private System.Windows.Forms.Button ResetButton;
+        private System.Windows.Forms.Button SaveButton;
+        private System.Windows.Forms.Button LoadButton;
     }
 }
 
