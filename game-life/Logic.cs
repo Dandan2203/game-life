@@ -13,12 +13,14 @@ namespace game_life
     public class Logic
     {
         private bool[,] field;
+        private Backup backup;
         private const int rows = 40;
         private const int cols = 40;
 
         public Logic(int rows, int cols)
         {
             field = new bool[rows, cols];
+            backup = new Backup();
         }
 
         private int Neighbours(int x, int y)
@@ -90,31 +92,9 @@ namespace game_life
             UpdateCell(x, y, false);
         }
 
-        public void SaveFieldToFile(string filename)
-        {
-            StringBuilder sb = new StringBuilder();
-            for (int y = 0; y < rows; y++)
-            {
-                for (int x = 0; x < cols; x++)
-                {
-                    sb.Append(field[x, y] ? "1" : "0");
-                }
-                sb.AppendLine();
-            }
-            File.WriteAllText(filename, sb.ToString());
-        }
+        public void SaveFieldToFile(string filename) => backup.save(filename, CurrentGeneration());
 
-        public void LoadFieldFromFile(string filename)
-        {
-            string[] lines = File.ReadAllLines(filename);
-            for (int y = 0; y < Math.Min(rows, lines.Length); y++)
-            {
-                for (int x = 0; x < Math.Min(cols, lines[y].Length); x++)
-                {
-                    field[x, y] = lines[y][x] == '1';
-                }
-            }
-        }
+        public void LoadFieldFromFile(string filename) => field = backup.load(filename, rows, cols);
 
         public void ClearField()
         {
